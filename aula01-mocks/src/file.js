@@ -1,6 +1,5 @@
 const { readFile } = require("fs/promises");
-const { join } = require("path");
-
+const User = require("./user")
 const { error } = require("./constants");
 
 const DEFAULT_OPTIONS = {
@@ -77,8 +76,10 @@ class File {
         user[header[index]] =columns[index]
       }
 
-      console.log(user);
+      return new User(user);
     })
+
+    return users
   }
 }
 
