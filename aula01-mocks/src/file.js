@@ -14,7 +14,10 @@ class File {
     // faz a verificação do arquivo
     const validation = File.isValid(content);
     if (!validation.valid) throw new Error(validation.error);
-    return content;
+
+    // chamando a função para converter csv to Json 
+    const users = File.parseCSVToJSON(content)
+    return users
   }
   // funçãp que recebe um path para o arquivo a ser retornado
   static async getFileContent(filePath) {
@@ -50,6 +53,32 @@ class File {
     }
 
     return { valid: true };
+  }
+
+  // função para transformar csv em json
+  static parseCSVToJSON(csvString) {
+    // separa linhas por quenra de linhas
+    const lines = csvString.split('\n');
+
+    // remove o pimeiro item e joga na variavel
+    const firstLine = lines.shift();
+
+    // pega todos os elementos do header separados por virgula
+    const header = firstLine.split(',')
+
+    const users = lines.map(line => {
+      // separar as colunas pelas virgulas
+      const columns = line.split(',');
+      let user = {}
+
+      for (const index in columns) {
+        //passar o valor do header que está no index, para a coluna no index
+        // ex header na posição 0 = id, coluna na posição 0 = 123
+        user[header[index]] =columns[index]
+      }
+
+      console.log(user);
+    })
   }
 }
 
